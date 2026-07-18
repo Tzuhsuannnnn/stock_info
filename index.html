@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>布料庫存系統</title>
+  <!-- 引入 Tailwind CSS 讓手機版排版好看 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 阻擋 Google 搜尋引擎抓取此網頁，增加隱蔽性 -->
+  <meta name="robots" content="noindex, nofollow">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+  
+  <!-- 畫面中間的白色卡片 -->
+  <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-sm text-center">
+
+    <!-- 區塊 1：載入中畫面 (預設顯示) -->
+    <div id="loading-section" class="py-8">
+      <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-slate-800 mx-auto mb-4"></div>
+      <p class="text-gray-600 font-medium">讀取最新資料中...</p>
+    </div>
+
+    <!-- 區塊 2：布料資訊畫面 (預設隱藏) -->
+    <div id="data-section" class="hidden text-left">
+      <h2 class="text-2xl font-black mb-6 text-slate-800 border-b-2 border-slate-100 pb-3">布料資訊</h2>
+      
+      <div class="mb-4">
+        <p class="text-sm text-gray-500 mb-1">貨號</p>
+        <p id="fabric-id" class="text-xl font-bold text-gray-800"></p>
+      </div>
+      
+      <div class="mb-4">
+        <p class="text-sm text-gray-500 mb-1">成分</p>
+        <div class="flex items-baseline gap-2">
+          <p id="fabric-material" class="text-lg font-medium text-gray-800"></p>
+          <p>g/m</p>
+        </div>
+      </div>
+      
+      <div class="mb-2">
+        <p class="text-sm text-gray-500 mb-1">庫存狀態</p>
+        <!-- 狀態標籤，顏色會透過 JS 動態改變 -->
+        <span id="fabric-stock" class="inline-block px-3 py-1 rounded-full text-sm font-bold"></span>
+      </div>
+    </div>
+
+    <!-- 區塊 3：錯誤畫面 (預設隱藏) -->
+    <div id="error-section" class="hidden py-6">
+      <p id="error-message" class="text-red-500 font-bold text-lg mb-2"></p>
+      <p class="text-gray-500 text-sm">請確認 QR Code 是否完整或聯絡客服</p>
+    </div>
+
+  </div>
+
+  <script>
+    // 1. 貼上你拿到的 Google Apps Script 網址
+    const API_URL = "https://script.google.com/macros/s/AKfycbxGJKk58xYB6VIB3ZJPG-5bDf1lOIS17EMsRPQz70j-pHl5EpWYkxx-Pj4N93kHn0c8/exec";
+    
+    // 從網址取得 id 參數
+    const urlParams = new URLSearchParams(window.location.search);
+    const fabricId = urlParams.get('id');
+
+    // 切換顯示區塊的函數
+    function showSection(sectionId) {
+      document.getElementById('loading-section').classList.add('hidden');
+      document.getElementById('data-section').classList.add('hidden');
+      document.getElementById('error-section').classList.add('hidden');
+      document.getElementById(sectionId).classList.remove('hidden');
+    }
+
+    // 網頁載入時立刻執行
+    window.onload = () => {
+      // 如果網址沒有帶 ?id=xxx，直接報錯
+      if (!fabricId) {
+        showSection('error-section');
+        document.getElementById('error-message').innerText = "❌ 無法辨識商品";
+        return;
+      }
+      
+      // 網址正確，直接向 Google Sheets 抓資料
+      fetchData();
+    };
+
+    // 去 Google Sheets 抓資料的邏輯
+    function fetchData() {
+      fetch(`${API_URL}?id=${fabricId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            showSection('data-section');
+            document.getElementById('fabric-id').innerText = data.data.id;
+            document.getElementById('fabric-material').innerText = data.data.material;
+            
+            const stockEl = document.getElementById('fabric-stock');
+            stockEl.innerText = data.data.inStock;
+            
+            // 如果 Excel 寫「有」就顯示綠色，否則顯示紅色
+            if(data.data.inStock === '有' || data.data.inStock > 0) {
+              stockEl.classList.add('bg-green-100', 'text-green-700');
+            } else {
+              stockEl.classList.add('bg-red-100', 'text-red-700');
+            }
+          } else {
+            showSection('error-section');
+            document.getElementById('error-message').innerText = "❌ " + data.message;
+          }
+        })
+        .catch(err => {
+          showSection('error-section');
+          document.getElementById('error-message').innerText = "❌ 網路連線異常";
+        });
+    }
+  </script>
+</body>
+</html>
