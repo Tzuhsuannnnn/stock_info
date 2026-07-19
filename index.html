@@ -90,7 +90,7 @@
         .then(data => {
           if (data.success) {
             showSection('data-section');
-            document.getElementById('fabric-id').innerText = data.data.item;
+            document.getElementById('fabric-item').innerText = data.data.item;
             document.getElementById('fabric-weight').innerText = data.data.weight;
             
             const stockEl = document.getElementById('fabric-stock');
