@@ -23,16 +23,16 @@
     <!-- 區塊 2：布料資訊畫面 (預設隱藏) -->
     <div id="data-section" class="hidden text-left">
       <div class="mb-6 flex items-center justify-between gap-3 border-b border-slate-100 pb-4">
-        <h2 class="text-2xl sm:text-3xl font-black text-slate-800">布料資訊</h2>
+        <h2 class="text-2xl sm:text-3xl font-black text-slate-800">布料資訊 Fabric Info</h2>
       </div>
 
       <div class="mb-4 rounded-2xl bg-slate-50 p-4 shadow-sm">
-        <p class="text-sm font-medium tracking-wide text-gray-500 mb-2">貨號</p>
+        <p class="text-sm font-medium tracking-wide text-gray-500 mb-2">貨號 Item</p>
         <p id="fabric-id" class="text-xl font-bold tracking-wide text-slate-800 break-words"></p>
       </div>
       
       <div class="mb-4 rounded-2xl bg-slate-50 p-4 shadow-sm">
-        <p class="text-sm font-medium tracking-wide text-gray-500 mb-2">克重</p>
+        <p class="text-sm font-medium tracking-wide text-gray-500 mb-2">克重 Weight</p>
         <div class="flex flex-wrap items-end gap-x-2 gap-y-1">
           <p id="fabric-weight" class="text-lg sm:text-xl font-semibold text-slate-900"></p>
           <p class="text-sm sm:text-base text-slate-500 font-medium">g/m</p>
@@ -40,7 +40,7 @@
       </div>
       
       <div class="mb-2 rounded-2xl bg-slate-50 p-4 shadow-sm">
-        <p class="text-sm font-medium tracking-wide text-gray-500 mb-2">庫存狀態</p>
+        <p class="text-sm font-medium tracking-wide text-gray-500 mb-2">庫存狀態 Stock Status</p>
         <!-- 狀態標籤，顏色會透過 JS 動態改變 -->
         <span id="fabric-stock" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold"></span>
       </div>
@@ -90,7 +90,7 @@
         .then(data => {
           if (data.success) {
             showSection('data-section');
-            document.getElementById('fabric-id').innerText = data.data.id;
+            document.getElementById('fabric-id').innerText = data.data.item;
             document.getElementById('fabric-weight').innerText = data.data.weight;
             
             const stockEl = document.getElementById('fabric-stock');
