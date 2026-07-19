@@ -34,7 +34,7 @@
       <div class="mb-4 rounded-2xl bg-slate-50 p-4 shadow-sm">
         <p class="text-sm font-medium tracking-wide text-gray-500 mb-2">克重</p>
         <div class="flex flex-wrap items-end gap-x-2 gap-y-1">
-          <p id="fabric-material" class="text-lg sm:text-xl font-semibold text-slate-900"></p>
+          <p id="fabric-weight" class="text-lg sm:text-xl font-semibold text-slate-900"></p>
           <p class="text-sm sm:text-base text-slate-500 font-medium">g/m</p>
         </div>
       </div>
@@ -91,7 +91,7 @@
           if (data.success) {
             showSection('data-section');
             document.getElementById('fabric-id').innerText = data.data.id;
-            document.getElementById('fabric-material').innerText = data.data.material;
+            document.getElementById('fabric-weight').innerText = data.data.weight;
             
             const stockEl = document.getElementById('fabric-stock');
             stockEl.innerText = data.data.inStock;
