@@ -26,12 +26,6 @@
         <h2 class="text-2xl sm:text-3xl font-black text-slate-800">布料資訊</h2>
       </div>
 
-      <!-- 👇 新增的 num 區塊 -->
-      <div class="mb-4 rounded-2xl bg-slate-50 p-4 shadow-sm border-l-4 border-slate-400">
-        <p class="text-sm font-medium tracking-wide text-gray-500 mb-2">專屬編號</p>
-        <p id="fabric-num" class="text-3xl font-black tracking-wide text-slate-900 break-words"></p>
-      </div>
-      
       <div class="mb-4 rounded-2xl bg-slate-50 p-4 shadow-sm">
         <p class="text-sm font-medium tracking-wide text-gray-500 mb-2">貨號</p>
         <p id="fabric-id" class="text-xl font-bold tracking-wide text-slate-800 break-words"></p>
@@ -96,8 +90,6 @@
         .then(data => {
           if (data.success) {
             showSection('data-section');
-            // 👇 這裡新增了一行，把後端傳來的 num 放進網頁中
-            document.getElementById('fabric-num').innerText = data.data.num;
             document.getElementById('fabric-id').innerText = data.data.id;
             document.getElementById('fabric-material').innerText = data.data.material;
             
